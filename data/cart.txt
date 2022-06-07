@@ -1,0 +1,1 @@
+[{"id":2,"timestamp":1654121869742,"products":[{"id":2,"timestamp":1654121869742,"products":[]},{"name":"Calculadora","price":234.56,"photoURL":"https://cdn3.iconfinder.com/data/icons/education-209/64/calculator-math-tool-school-256.png","id":2,"stock":2,"timestamp":1234,"description":"asd","code":"a-1"}]},{"id":4,"timestamp":1654121875398,"products":[]}]
