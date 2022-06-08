@@ -15,9 +15,7 @@ class Products {
             ...this.productList.map((product: StoredProduct) => product.id)
           ) + 1;
 
-    const timestamp = Date.now();
-
-    this.productList.push({ id, ...product, timestamp });
+    this.productList.push({ id, ...product });
 
     return this.productList[this.productList.length - 1];
   };

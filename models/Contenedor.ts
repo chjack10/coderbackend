@@ -45,9 +45,7 @@ class Contenedor {
           ? 1
           : Math.max(...fileData.map((object: StoredProduct) => object.id)) + 1;
 
-      const timestamp = Date.now();
-
-      fileData.push({ ...product, id, timestamp });
+      fileData.push({ ...product, id });
       await this.writeFile(fileData);
 
       return id;
@@ -95,6 +93,8 @@ class Contenedor {
       console.log('Method deleteAll: ', err);
     }
   }
+
+  //TODO: Devolver {msg: 'Product not found'} si no existe el producto <Error>
 
   public async update(id: number, product: Product): Promise<void | Error> {
     try {
