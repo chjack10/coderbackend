@@ -1,44 +1,61 @@
 import { Error, Product, StoredProduct } from '../interfaces';
+import { mariaDB as db } from '../DB/connection';
+import { DataTypes } from 'sequelize';
 
 class Products {
   productList: StoredProduct[];
 
   constructor() {
     this.productList = [];
+    this.createTable();
   }
 
-  public add = (product: Product): StoredProduct => {
-    const id: number =
-      this.productList.length === 0
-        ? 1
-        : Math.max(
-            ...this.productList.map((product: StoredProduct) => product.id)
-          ) + 1;
-
-    this.productList.push({ id, ...product });
-
-    return this.productList[this.productList.length - 1];
-  };
-
-  public getById = (id: number): StoredProduct | Error => {
-    const product = this.productList.find((product) => product.id === id);
-
-    if (product) return product;
-    else return { error: 'producto no encontrado' };
-  };
-
-  public getAll(): StoredProduct[] {
-    return this.productList;
-  }
-
-  public deleteById(id: number): void {
-    this.productList = this.productList.filter((product) => product.id !== id);
-  }
-
-  public update(id: number, newData: Product): void {
-    this.productList = this.productList.map((product: StoredProduct) =>
-      product.id === id ? { ...product, ...newData } : product
+  public async createTable() {
+    const product = db.define(
+      'product',
+      {
+        id: {
+          type: DataTypes.INTEGER,
+          primaryKey: true,
+          autoIncrement: true,
+        },
+        title: {
+          type: DataTypes.STRING,
+        },
+        price: {
+          type: DataTypes.FLOAT,
+        },
+        thumbnail: {
+          type: DataTypes.STRING,
+        },
+      },
+      {
+        timestamps: false,
+      }
     );
+
+    await product.sync();
+  }
+
+  public add = async (product: StoredProduct): Promise<void> => {
+    await db.models.product.create({
+      title: product.title,
+      price: product.price,
+      thumbnail: product.thumbnail,
+    });
+  };
+
+  public async getAll(): Promise<StoredProduct[]> {
+    // return this.productList;
+
+    const products = await db.models.product.findAll();
+
+    return products.map((product: any) => ({
+      title: product.title,
+      price: product.price,
+      thumbnail: product.thumbnail,
+      id: product.id,
+    }));
   }
 }
 

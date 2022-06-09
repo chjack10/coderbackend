@@ -54,11 +54,11 @@ class Chat {
   public async getAllMessages(): Promise<Message[]> {
     const messages = await db.models.chat.findAll();
 
-    return messages.map((message: any) => ({
-      email: message.email,
-      message: message.message,
-      time: message.time,
-      dateString: message.dateString,
+    return messages.map(({ email, message, time, dateString }: any) => ({
+      email,
+      message,
+      time,
+      dateString,
     }));
   }
 }

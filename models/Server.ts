@@ -3,7 +3,8 @@ import cors from 'cors';
 import { Server as HttpServer } from 'http';
 import { Server as IOServer } from 'socket.io';
 
-import { sqliteDB as db } from '../DB/connection';
+import { sqliteDB as chatDB, mariaDB } from '../DB/connection';
+// import { mariaDB as productDB } from '../DB/connection';
 
 import products from './Products';
 import chat from './Chat';
@@ -31,10 +32,11 @@ class Server {
 
   async tryDbConnection() {
     try {
-      await db.authenticate();
+      // await mariaDB.authenticate();
+      await chatDB.authenticate();
       console.log('Database online');
     } catch (error: any) {
-      console.log(error);
+      console.log('Unable to connect to the database', error);
     }
   }
 
@@ -61,12 +63,12 @@ class Server {
     this.ioServer.on('connection', async (socket) => {
       console.log(`Client ${socket.id} connected`);
 
-      socket.emit('products', products.getAll());
+      socket.emit('products', await products.getAll());
       socket.emit('chatMessages', await chat.getAllMessages());
 
-      socket.on('newProduct', (product) => {
-        products.add(product);
-        this.ioServer.sockets.emit('products', products.getAll());
+      socket.on('newProduct', async (product) => {
+        await products.add(product);
+        this.ioServer.sockets.emit('products', await products.getAll());
       });
 
       socket.on('newChatMessage', async (newMessage) => {
