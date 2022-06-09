@@ -1,0 +1,11 @@
+{{#each messages}}
+
+  <div class='message'>
+    <span class='message-date d-flex'>
+      <strong class='text-primary'>{{email}}</strong>
+      <p class='text-warning'> [{{dateString}} {{time}}] </p>
+      <em class='text-success'>: {{message}}</em>
+    </span>
+  </div>
+
+{{/each}}
