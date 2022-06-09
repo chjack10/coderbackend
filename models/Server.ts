@@ -3,7 +3,7 @@ import cors from 'cors';
 import { Server as HttpServer } from 'http';
 import { Server as IOServer } from 'socket.io';
 
-import { sqliteDB as chatDB, mariaDB } from '../DB/connection';
+import { sqliteDB as chatDB } from '../DB/connection';
 // import { mariaDB as productDB } from '../DB/connection';
 
 import products from './Products';
@@ -25,14 +25,14 @@ class Server {
     this.port = process.env.PORT ?? '8080';
     this.httpServer = new HttpServer(this.app);
     this.ioServer = new IOServer(this.httpServer);
-    this.tryDbConnection();
+    this.TestDbConnection();
     this.middlewares();
     this.routes();
   }
 
-  async tryDbConnection() {
+  async TestDbConnection() {
     try {
-      // await mariaDB.authenticate();
+      // await productDB.authenticate();
       await chatDB.authenticate();
       console.log('Database online');
     } catch (error: any) {

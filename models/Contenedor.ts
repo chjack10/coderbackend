@@ -94,8 +94,6 @@ class Contenedor {
     }
   }
 
-  //TODO: Devolver {msg: 'Product not found'} si no existe el producto <Error>
-
   public async update(id: number, product: Product): Promise<void | Error> {
     try {
       const fileData: StoredProduct[] = await this.readFile();
